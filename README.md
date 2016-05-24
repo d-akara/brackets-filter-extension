@@ -1,4 +1,4 @@
-# brackets-filter-extension
+# Brackets Project File Filter Chains
 Extension to enhance project file filtering using chained filtering.
 This extension provides filtering capabilities that are useful for very large projects with complex directory structures.
 
