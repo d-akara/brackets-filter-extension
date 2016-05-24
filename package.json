@@ -1,0 +1,25 @@
+{
+  "name": "dakaraphi.project.filefilter",
+  "title": "Project File Filter Chains",
+  "version": "1.0.0",
+  "description": "Project file filters supporting chaining, includes, excludes and regular expressions.",
+  "homepage": "https://github.com/dakaraphi/brackets-filter-extension",
+  "author": {
+    "name": "Chad Meadows",
+    "url": "https://github.com/dakaraphi"
+  },
+  "repository": {
+    "url": "https://github.com/dakaraphi/brackets-filter-extension.git",
+    "type": "git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "project",
+    "file",
+    "filter",
+    "exclude"
+  ],
+  "engines": {
+    "brackets": ">=1.6.0"
+  }
+}
