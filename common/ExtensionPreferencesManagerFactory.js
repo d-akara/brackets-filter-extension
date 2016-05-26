@@ -4,6 +4,13 @@ define(function (require, exports, module) {
     'use strict';
     var PreferencesManager  = brackets.getModule('preferences/PreferencesManager');
 
+    /**
+     * @param {String} extendsionId name of extension defined in package.json
+     * @param {String} key name of preference
+     * @param {String} type the JavaScript type for the value
+     * @param {Object|String|Array} defaultValue the default value for the preference
+     * @param {function} fnOnChange called when the value of the preference has changed
+     */
     function createExtensionPreferenceManager(extensionId, key, type, defaultValue, fnOnChange) {
         var preferences = PreferencesManager.getExtensionPrefs(extensionId);
 

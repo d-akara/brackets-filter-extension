@@ -4,10 +4,13 @@ define(function (require, exports, module) {
     'use strict';
     var _                   = brackets.getModule('thirdparty/lodash');
     var FileSystem          = brackets.getModule('filesystem/FileSystem');
+    var StringUtils         = brackets.getModule("utils/StringUtils");
+    var Strings             = require('common/strings');
 
     var _originalFilter;
     var _definedFilterSets;
     var _definedActiveFilter;
+    var _fnNotifyError;
 
     function getFilterSetByName(filterSetName) {
         return _definedFilterSets.load().filter(function (filterSet) {
@@ -59,7 +62,7 @@ define(function (require, exports, module) {
         if (!filterSetName) {return; }
 
         var filterSettings = getFilterSetByName(filterSetName);
-        if (!filterSettings) {return; }
+        if (!filterSettings) { _fnNotifyError(StringUtils.format(Strings.FILTERSET_NOT_FOUND, filterSetName)); return; }
 
         console.log("Setting filter ", filterSettings);
 
@@ -69,13 +72,16 @@ define(function (require, exports, module) {
 
     }
 
-    function configureFilter(definedFilterSets, definedActiveFilter) {
+    function configureFilter(definedFilterSets, definedActiveFilter, fnNotifyError) {
         _definedFilterSets = definedFilterSets;
         _definedActiveFilter = definedActiveFilter;
+        _fnNotifyError = fnNotifyError;
         registerFilter(isFileIncludedFilter);
     }
 
     function reloadFilter() {
+        // TODO this gets over called from the change notify
+        // Need to figure out how to handle so this is not repeated more than needed.
         registerFilter(isFileIncludedFilter);
     }
 
