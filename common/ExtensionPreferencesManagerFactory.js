@@ -2,6 +2,7 @@
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, maxerr: 50 */
 define(function (require, exports, module) {
     'use strict';
+    var _                   = brackets.getModule('thirdparty/lodash');
     var PreferencesManager  = brackets.getModule('preferences/PreferencesManager');
 
     /**
@@ -13,15 +14,18 @@ define(function (require, exports, module) {
      */
     function createExtensionPreferenceManager(extensionId, key, type, defaultValue, fnOnChange) {
         var preferences = PreferencesManager.getExtensionPrefs(extensionId);
+        var currentPreference, originalPreference;
 
         var definedPreferences = preferences.definePreference(key, type, defaultValue);
         if (fnOnChange) {
             definedPreferences.on("change", function () {
-                fnOnChange(preferences.get(key, PreferencesManager.CURRENT_PROJECT));
+                var newValue = preferences.get(key, PreferencesManager.CURRENT_PROJECT);
+                if (!_.isEqual(newValue, currentPreference)) {
+                    fnOnChange(preferences.get(key, PreferencesManager.CURRENT_PROJECT));
+                }
             });
         }
 
-        var currentPreference, originalPreference;
         return {
             load: function () {
                 currentPreference = preferences.get(key, PreferencesManager.CURRENT_PROJECT);

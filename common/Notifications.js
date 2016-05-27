@@ -7,7 +7,7 @@ define(function (require, exports, module) {
     var Strings             = require("common/strings");
 
     function showMessage(title, message, buttonText) {
-        Dialogs.showModalDialog(DefaultDialogs.DIALOG_ID_ERROR, title, message, [
+        return Dialogs.showModalDialog(DefaultDialogs.DIALOG_ID_ERROR, title, message, [
             {
                 className : Dialogs.DIALOG_BTN_CLASS_PRIMARY,
                 id        : Dialogs.DIALOG_BTN_OK,

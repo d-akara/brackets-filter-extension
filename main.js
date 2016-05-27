@@ -25,7 +25,13 @@ define(function (require, exports, module) {
     var definedActiveFilter = ExtensionPreferencesManagerFactory.createExtensionPreferenceManager(PackageJson.name, 'filterSetActive', 'string', 'default', onPreferenceChanged);
 
     function showErrorMessage(message) {
-        Notifications.showMessage(PackageJson.title, message, Strings.OPEN_PREFERENCES);
+        var dialog = Notifications.showMessage(PackageJson.title, message, Strings.OPEN_PREFERENCES);
+        dialog.done(function (buttonId) {
+            CommandManager.execute(Commands.FILE_OPEN_PREFERENCES);
+            // TODO see if we can open the prefernces
+            // move to the preference and display error above the preference location
+            //Editor.displayErrorMessageAtCursor
+        });
     }
 
     FileFilter.configureFilter(definedFilterSets, definedActiveFilter, showErrorMessage);
