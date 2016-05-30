@@ -6,6 +6,7 @@ define(function (require, exports, module) {
     var FileSystem          = brackets.getModule('filesystem/FileSystem');
     var StringUtils         = brackets.getModule("utils/StringUtils");
     var Strings             = require('common/strings');
+    var Notifications       = require('common/Notifications');
 
     var _originalFilter;
     var _definedFilterSets;
@@ -62,7 +63,7 @@ define(function (require, exports, module) {
         if (!filterSetName) {return; }
 
         var filterSettings = getFilterSetByName(filterSetName);
-        if (!filterSettings) { _fnNotifyError(StringUtils.format(Strings.FILTERSET_NOT_FOUND, filterSetName)); return; }
+        if (!filterSettings) { _fnNotifyError(StringUtils.format(Strings.FILTERSET_NOT_FOUND, Notifications.createHighlightMarkup(filterSetName))); return; }
 
         console.log("Setting filter ", filterSettings);
 
@@ -80,8 +81,6 @@ define(function (require, exports, module) {
     }
 
     function reloadFilter() {
-        // TODO this gets over called from the change notify
-        // Need to figure out how to handle so this is not repeated more than needed.
         registerFilter(isFileIncludedFilter);
     }
 
