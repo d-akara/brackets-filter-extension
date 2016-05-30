@@ -30,8 +30,9 @@ define(function (require, exports, module) {
         var definedFilterSets   = ExtensionPreferencesManagerFactory.createExtensionPreferenceManager(PackageJson.name, 'filterSets', 'array', [], onPreferenceChanged);
         var definedActiveFilter = ExtensionPreferencesManagerFactory.createExtensionPreferenceManager(PackageJson.name, 'filterSetActive', 'string', 'default', onPreferenceChanged);
 
-        function showErrorMessage(message) {
-            var dialog = Notifications.showMessage(PackageJson.title, [message, StringUtils.format(Strings.REVIEW_PREFERENCE, Notifications.createHighlightMarkup(PackageJson.name))], Strings.DISMISS);
+        function showErrorMessage(messages) {
+            messages.push(StringUtils.format(Strings.REVIEW_PREFERENCE, Notifications.createHighlightMarkup(PackageJson.name)));
+            var dialog = Notifications.showMessage(PackageJson.title, messages, Strings.DISMISS);
         }
         FileFilter.configureFilter(definedFilterSets, definedActiveFilter, showErrorMessage);
     });

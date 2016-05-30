@@ -6,7 +6,7 @@ define(function (require, exports, module) {
     var PreferencesManager  = brackets.getModule('preferences/PreferencesManager');
 
     function shouldSendNotificationWhenPreferenceChanged(newValue, oldValue, newScope, oldScope) {
-        var valueChangedAndSameScope = !_.isEqual(newValue, oldValue) && (newScope.scope === oldScope.scope)
+        var valueChangedAndSameScope = !_.isEqual(newValue, oldValue) && (newScope.scope === oldScope.scope);
         var scopeChanged = newScope !== oldScope;
         return valueChangedAndSameScope || scopeChanged;
     }
@@ -47,7 +47,8 @@ define(function (require, exports, module) {
             set: function (value) {currentPreference = value; },
             get: function () {return currentPreference || this.load(); },
             save: function () {preferences.set(key, currentPreference); },
-            restore: function () {this.set(originalPreference); }
+            restore: function () {this.set(originalPreference); },
+            filePath: function () {return preferences.base._scopes[loadedLocation.scope].storage.path; }
         };
     }
 

@@ -9,7 +9,7 @@ define(function (require, exports, module) {
     var DialogTemplate      = require("text!common/html/notification-dialog.html");
 
     function createHightlightMarkup(text) {
-        return "<span class='badge badge-info'>" + text + "</span>";
+        return "<span class='label label-important'>" + text + "</span>";
     }
 
     function showMessage(title, messages, buttonText) {

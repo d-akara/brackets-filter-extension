@@ -23,6 +23,7 @@ define(function (require, exports, module) {
         return new RegExp(regex);
     });
 
+
     function isFileIncludedFilter(path, name, fileProperties, filterList) {
         var isExcluded = _.any(filterList, function (filter) {
             var regex = getRegularExpression(filter.regex);
@@ -63,9 +64,13 @@ define(function (require, exports, module) {
         if (!filterSetName) {return; }
 
         var filterSettings = getFilterSetByName(filterSetName);
-        if (!filterSettings) { _fnNotifyError(StringUtils.format(Strings.FILTERSET_NOT_FOUND, Notifications.createHighlightMarkup(filterSetName))); return; }
-
-        console.log("Setting filter ", filterSettings);
+        if (!filterSettings) {
+            var messages = [];
+            messages.push(StringUtils.format(Strings.FILTERSET_NOT_FOUND, Notifications.createHighlightMarkup(filterSetName)));
+            messages.push(StringUtils.format(Strings.PREFERENCES_FILE, Notifications.createHighlightMarkup(_definedActiveFilter.filePath())));
+            _fnNotifyError(messages);
+            return;
+        }
 
         FileSystem._FileSystem.prototype._indexFilter = function (path, name, fileProperties) {
             return !(!filter(path, name, fileProperties, filterSettings.filters) || !_originalFilter.apply(this, arguments));
