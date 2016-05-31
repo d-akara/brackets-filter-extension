@@ -18,6 +18,9 @@ define(function (require, exports, module) {
 
     var PackageJson = JSON.parse(require('text!./package.json'));
 
+    /**
+     * Reload values from preferences, apply filter and refresh file list in UI
+     */
     function onPreferenceChanged() {
         FileFilter.reloadFilter();
         CommandManager.execute(Commands.FILE_REFRESH);
@@ -34,6 +37,8 @@ define(function (require, exports, module) {
             messages.push(StringUtils.format(Strings.REVIEW_PREFERENCE, Notifications.createHighlightMarkup(PackageJson.name)));
             var dialog = Notifications.showMessage(PackageJson.title, messages, Strings.DISMISS);
         }
+
+        // Install our filter with definitions defined in preferences
         FileFilter.configureFilter(definedFilterSets, definedActiveFilter, showErrorMessage);
     });
 });

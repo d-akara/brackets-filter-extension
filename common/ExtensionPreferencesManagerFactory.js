@@ -5,7 +5,16 @@ define(function (require, exports, module) {
     var _                   = brackets.getModule('thirdparty/lodash');
     var PreferencesManager  = brackets.getModule('preferences/PreferencesManager');
 
-    function shouldSendNotificationWhenPreferenceChanged(newValue, oldValue, newScope, oldScope) {
+    /**
+     * If preference value changed in current scope or if scope change we should notify
+     * @param   {Object} newValue preference value
+     * @param   {Object} oldValue preference value
+     * @param   {String}   newScope project|user
+     * @param   {String}   oldScope project|user
+     * @returns {boolean} true if we should notify
+     */
+
+    function _shouldSendNotificationWhenPreferenceChanged(newValue, oldValue, newScope, oldScope) {
         var valueChangedAndSameScope = !_.isEqual(newValue, oldValue) && (newScope.scope === oldScope.scope);
         var scopeChanged = newScope !== oldScope;
         return valueChangedAndSameScope || scopeChanged;
@@ -30,7 +39,7 @@ define(function (require, exports, module) {
                 // Only pay attention to the location we are using
                 var location = preferences.getPreferenceLocation(key);
                 var newValue = preferences.get(key, PreferencesManager.CURRENT_PROJECT);
-                if (shouldSendNotificationWhenPreferenceChanged(newValue, currentPreference, location.scope, loadedLocation.scope)) {
+                if (_shouldSendNotificationWhenPreferenceChanged(newValue, currentPreference, location.scope, loadedLocation.scope)) {
                     fnOnChange(preferences.get(key, PreferencesManager.CURRENT_PROJECT));
                 }
             });

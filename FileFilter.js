@@ -13,20 +13,34 @@ define(function (require, exports, module) {
     var _definedActiveFilter;
     var _fnNotifyError;
 
-    function getFilterSetByName(filterSetName) {
+    /**
+     * Find the filter set by name from the list of filter sets defined in preferences
+     * @private
+     * @param   {String} filterSetName Name of filter set
+     * @returns {Object} Filter set
+     */
+    function _getFilterSetByName(filterSetName) {
         return _definedFilterSets.load().filter(function (filterSet) {
             return filterSet.name === filterSetName;
         }).pop();
     }
 
-    var getRegularExpression = _.memoize(function (regex) {
+    // Cache regular expressions
+    var _getRegularExpression = _.memoize(function (regex) {
         return new RegExp(regex);
     });
 
-
-    function isFileIncludedFilter(path, name, fileProperties, filterList) {
+    /**
+     * File filter implementation.
+     * @param   {String}  path           file location
+     * @param   {String}  name           file name
+     * @param   {object}  fileProperties file type information
+     * @param   {Array}   filterList     List of filters to test against file
+     * @returns {boolean} true if file should be included, else false
+     */
+    function _isFileIncludedFilter(path, name, fileProperties, filterList) {
         var isExcluded = _.any(filterList, function (filter) {
-            var regex = getRegularExpression(filter.regex);
+            var regex = _getRegularExpression(filter.regex);
             var filterBy = null;
             if ((filter.filterBy === "directory") && (fileProperties.isDirectory)) {
                 filterBy = path;
@@ -54,7 +68,12 @@ define(function (require, exports, module) {
         return !isExcluded;
     }
 
-    function registerFilter(filter) {
+    /**
+     * Replaces the Brackets default filter implementation
+     * @private
+     * @param   {Object} filter Filter implementation to replace default
+     */
+    function _registerFilter(filter) {
         // store original filter before we modify
         _originalFilter = _originalFilter || FileSystem._FileSystem.prototype._indexFilter;
         // reset filter to original before we attempt to change
@@ -63,7 +82,7 @@ define(function (require, exports, module) {
         var filterSetName = _definedActiveFilter.load();
         if (!filterSetName) {return; }
 
-        var filterSettings = getFilterSetByName(filterSetName);
+        var filterSettings = _getFilterSetByName(filterSetName);
         if (!filterSettings) {
             var messages = [];
             messages.push(StringUtils.format(Strings.FILTERSET_NOT_FOUND, Notifications.createHighlightMarkup(filterSetName)));
@@ -78,15 +97,24 @@ define(function (require, exports, module) {
 
     }
 
+    /**
+     * Install this filter in place of the default Brackets filter.
+     * @param {Object} definedFilterSets   [[Description]]
+     * @param {String} definedActiveFilter [[Description]]
+     * @param {function} fnNotifyError       [[Description]]
+     */
     function configureFilter(definedFilterSets, definedActiveFilter, fnNotifyError) {
         _definedFilterSets = definedFilterSets;
         _definedActiveFilter = definedActiveFilter;
         _fnNotifyError = fnNotifyError;
-        registerFilter(isFileIncludedFilter);
+        _registerFilter(_isFileIncludedFilter);
     }
 
+    /**
+     * Reload extensions preferences and reset the filter.
+     */
     function reloadFilter() {
-        registerFilter(isFileIncludedFilter);
+        _registerFilter(_isFileIncludedFilter);
     }
 
     exports.configureFilter = configureFilter;
