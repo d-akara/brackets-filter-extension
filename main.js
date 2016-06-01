@@ -29,16 +29,14 @@ define(function (require, exports, module) {
     // replace original Brackets function with patched version
     Directory.prototype.getContents = DirectoryGetContentsPatch;
 
-    AppInit.appReady(function () {
-        var definedFilterSets   = ExtensionPreferencesManagerFactory.createExtensionPreferenceManager(PackageJson.name, 'filterSets', 'array', [], onPreferenceChanged);
-        var definedActiveFilter = ExtensionPreferencesManagerFactory.createExtensionPreferenceManager(PackageJson.name, 'filterSetActive', 'string', 'default', onPreferenceChanged);
+    var definedFilterSets   = ExtensionPreferencesManagerFactory.createExtensionPreferenceManager(PackageJson.name, 'filterSets', 'array', [], onPreferenceChanged);
+    var definedActiveFilter = ExtensionPreferencesManagerFactory.createExtensionPreferenceManager(PackageJson.name, 'filterSetActive', 'string', 'default', onPreferenceChanged);
 
-        function showErrorMessage(messages) {
-            messages.push(StringUtils.format(Strings.REVIEW_PREFERENCE, Notifications.createHighlightMarkup(PackageJson.name)));
-            var dialog = Notifications.showMessage(PackageJson.title, messages, Strings.DISMISS);
-        }
+    function showErrorMessage(messages) {
+        messages.push(StringUtils.format(Strings.REVIEW_PREFERENCE, Notifications.createHighlightMarkup(PackageJson.name)));
+        var dialog = Notifications.showMessage(PackageJson.title, messages, Strings.DISMISS);
+    }
 
-        // Install our filter with definitions defined in preferences
-        FileFilter.configureFilter(definedFilterSets, definedActiveFilter, showErrorMessage);
-    });
+    // Install our filter with definitions defined in preferences
+    FileFilter.configureFilter(definedFilterSets, definedActiveFilter, showErrorMessage);
 });

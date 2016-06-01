@@ -4,6 +4,7 @@ define(function (require, exports, module) {
     'use strict';
     var _                   = brackets.getModule('thirdparty/lodash');
     var FileSystem          = brackets.getModule('filesystem/FileSystem');
+    var FileUtils           = brackets.getModule('file/FileUtils');
     var StringUtils         = brackets.getModule("utils/StringUtils");
     var Strings             = require('common/strings');
     var Notifications       = require('common/Notifications');
@@ -92,6 +93,9 @@ define(function (require, exports, module) {
         }
 
         FileSystem._FileSystem.prototype._indexFilter = function (path, name, fileProperties) {
+            // bypass filtering for anything that is part of brackets
+            if (path.indexOf(brackets.app.getApplicationSupportDirectory()) > -1) {return true; }
+            // perform filtering using supplied filter
             return !(!filter(path, name, fileProperties, filterSettings.filters) || !_originalFilter.apply(this, arguments));
         };
 
@@ -99,9 +103,9 @@ define(function (require, exports, module) {
 
     /**
      * Install this filter in place of the default Brackets filter.
-     * @param {Object} definedFilterSets   [[Description]]
-     * @param {String} definedActiveFilter [[Description]]
-     * @param {function} fnNotifyError       [[Description]]
+     * @param {Object} definedFilterSets   ExtensionPreferenceManager of filter sets defined in preferences
+     * @param {Object} definedActiveFilter ExtensionPreferenceManager for name of filter set
+     * @param {function} fnNotifyError     function accepts array of strings to display to UI
      */
     function configureFilter(definedFilterSets, definedActiveFilter, fnNotifyError) {
         _definedFilterSets = definedFilterSets;
