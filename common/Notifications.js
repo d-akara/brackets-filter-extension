@@ -1,10 +1,9 @@
-/*globals define, brackets */
+/*globals define, brackets, Mustache */
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, maxerr: 50 */
 define(function (require, exports, module) {
     'use strict';
     var Dialogs             = brackets.getModule("widgets/Dialogs");
     var DefaultDialogs      = brackets.getModule("widgets/DefaultDialogs");
-    var Mustache            = brackets.getModule("thirdparty/mustache/mustache");
     var Strings             = require("common/strings");
     var DialogTemplate      = require("text!common/html/notification-dialog.html");
 

@@ -29,8 +29,20 @@ define(function (require, exports, module) {
     // replace original Brackets function with patched version
     Directory.prototype.getContents = DirectoryGetContentsPatch;
 
-    var definedFilterSets   = ExtensionPreferencesManagerFactory.createExtensionPreferenceManager(PackageJson.name, 'filterSets', 'array', [], onPreferenceChanged);
-    var definedActiveFilter = ExtensionPreferencesManagerFactory.createExtensionPreferenceManager(PackageJson.name, 'filterSetActive', 'string', 'default', onPreferenceChanged);
+    var defaultFilterExample = [
+        {
+            "name": "node",
+            "filters": [
+                {
+                    "regex": "node_modules",
+                    "action": "exclude",
+                    "filterBy": "directory"
+                }
+            ]
+        }
+    ];
+    var definedFilterSets   = ExtensionPreferencesManagerFactory.createExtensionPreferenceManager(PackageJson.name, 'filterSets', 'array', defaultFilterExample, onPreferenceChanged);
+    var definedActiveFilter = ExtensionPreferencesManagerFactory.createExtensionPreferenceManager(PackageJson.name, 'filterSetActive', 'string', '', onPreferenceChanged);
 
     function showErrorMessage(messages) {
         messages.push(StringUtils.format(Strings.REVIEW_PREFERENCE, Notifications.createHighlightMarkup(PackageJson.name)));

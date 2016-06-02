@@ -21,6 +21,25 @@ define(function (require, exports, module) {
     }
 
     /**
+     * Create a user preference if it does not already exist
+     * @private
+     * @param   {Object} preferences  extensions preferences
+     * @param   {String} key          name of preference
+     * @param   {Object} defaultValue value to store in user preference
+     * @returns {Object} the defined preference
+     */
+
+    function _createDefaultUserPreference(preferences, key, defaultValue) {
+        var definedPreference = preferences.get(key, {scopeOrder: ['user']});
+        if (!definedPreference) {
+            return preferences.set(key, defaultValue, {
+                location: {scope: 'user'}
+            });
+        }
+        return definedPreference;
+    }
+
+    /**
      * @param {String} extendsionId name of extension defined in package.json
      * @param {String} key name of preference
      * @param {String} type the JavaScript type for the value
@@ -32,9 +51,10 @@ define(function (require, exports, module) {
         var currentPreference, originalPreference;
         var loadedLocation;
         var definedPreferences = preferences.definePreference(key, type, defaultValue);
+        _createDefaultUserPreference(preferences, key, defaultValue);
         if (fnOnChange) {
             definedPreferences.on("change", function () {
-                if (!originalPreference) {return; }  // preferences not yet loaded
+                if (originalPreference === undefined) {return; }  // preferences not yet loaded
                 // We will get notified for other brackets.json files
                 // Only pay attention to the location we are using
                 var location = preferences.getPreferenceLocation(key);
