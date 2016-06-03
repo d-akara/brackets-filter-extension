@@ -26,9 +26,9 @@ define(function (require, exports, module) {
         CommandManager.execute(Commands.FILE_REFRESH);
     }
 
-    // replace original Brackets function with patched version
-    Directory.prototype.getContents = DirectoryGetContentsPatch;
 
+    // Use this as a default example to create in the user preferences
+    // if there is currently no preference already specified
     var defaultFilterExample = [
         {
             "name": "node",
@@ -41,6 +41,7 @@ define(function (require, exports, module) {
             ]
         }
     ];
+
     var definedFilterSets   = ExtensionPreferencesManagerFactory.createExtensionPreferenceManager(PackageJson.name, 'filterSets', 'array', defaultFilterExample, onPreferenceChanged);
     var definedActiveFilter = ExtensionPreferencesManagerFactory.createExtensionPreferenceManager(PackageJson.name, 'filterSetActive', 'string', '', onPreferenceChanged);
 
@@ -48,6 +49,9 @@ define(function (require, exports, module) {
         messages.push(StringUtils.format(Strings.REVIEW_PREFERENCE, Notifications.createHighlightMarkup(PackageJson.name)));
         var dialog = Notifications.showMessage(PackageJson.title, messages, Strings.DISMISS);
     }
+
+    // replace original Brackets function with patched version
+    Directory.prototype.getContents = DirectoryGetContentsPatch;
 
     // Install our filter with definitions defined in preferences
     FileFilter.configureFilter(definedFilterSets, definedActiveFilter, showErrorMessage);

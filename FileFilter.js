@@ -121,6 +121,8 @@ define(function (require, exports, module) {
         _registerFilter(_isFileIncludedFilter);
     }
 
+    exports._isFileIncludedFilter = _isFileIncludedFilter;
+
     exports.configureFilter = configureFilter;
     exports.reloadFilter = reloadFilter;
 });
