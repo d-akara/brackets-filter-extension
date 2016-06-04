@@ -58,7 +58,7 @@ define(function (require, exports, module) {
             if (regex.test(filterBy)) {
                 matched = true;
             }
-            console.log("path", path, name, matched);
+
             if (filter.action === "include") {
                 return !matched;
             }
