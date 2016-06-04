@@ -1,3 +1,10 @@
+/**
+ * Project File Filter Chains
+ *
+ * @author Chad Meadows
+ * @license http://opensource.org/licenses/MIT
+ */
+
 /*globals define, brackets */
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, maxerr: 50 */
 

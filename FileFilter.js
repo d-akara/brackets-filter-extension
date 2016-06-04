@@ -6,6 +6,7 @@ define(function (require, exports, module) {
     var FileSystem          = brackets.getModule('filesystem/FileSystem');
     var FileUtils           = brackets.getModule('file/FileUtils');
     var StringUtils         = brackets.getModule("utils/StringUtils");
+    var ProjectManager      = brackets.getModule('project/ProjectManager')
     var Strings             = require('common/strings');
     var Notifications       = require('common/Notifications');
 
@@ -57,7 +58,7 @@ define(function (require, exports, module) {
             if (regex.test(filterBy)) {
                 matched = true;
             }
-
+            console.log("path", path, name, matched);
             if (filter.action === "include") {
                 return !matched;
             }
@@ -95,8 +96,10 @@ define(function (require, exports, module) {
         FileSystem._FileSystem.prototype._indexFilter = function (path, name, fileProperties) {
             // bypass filtering for anything that is part of brackets
             if (path.indexOf(brackets.app.getApplicationSupportDirectory()) > -1) {return true; }
+            // We want the filter to not act on the full path outside of the project
+            var relativePath = ProjectManager.makeProjectRelativeIfPossible(path);
             // perform filtering using supplied filter
-            return !(!filter(path, name, fileProperties, filterSettings.filters) || !_originalFilter.apply(this, arguments));
+            return !(!filter(relativePath, name, fileProperties, filterSettings.filters) || !_originalFilter.apply(this, arguments));
         };
 
     }
@@ -121,8 +124,10 @@ define(function (require, exports, module) {
         _registerFilter(_isFileIncludedFilter);
     }
 
+    // export for unit testing
     exports._isFileIncludedFilter = _isFileIncludedFilter;
 
+    // public exports
     exports.configureFilter = configureFilter;
     exports.reloadFilter = reloadFilter;
 });

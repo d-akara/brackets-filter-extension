@@ -60,7 +60,7 @@ define(function (require, exports, module) {
                 var location = preferences.getPreferenceLocation(key);
                 var newValue = preferences.get(key, PreferencesManager.CURRENT_PROJECT);
                 if (_shouldSendNotificationWhenPreferenceChanged(newValue, currentPreference, location.scope, loadedLocation.scope)) {
-                    fnOnChange(preferences.get(key, PreferencesManager.CURRENT_PROJECT));
+                    fnOnChange(newValue);
                 }
             });
         }
