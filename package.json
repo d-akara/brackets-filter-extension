@@ -1,7 +1,7 @@
 {
   "name": "dakaraphi.project.filefilter",
   "title": "Project File Filter Chains",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Project file filters supporting chaining, includes, excludes and regular expressions.",
   "homepage": "https://github.com/dakaraphi/brackets-filter-extension",
   "author": {
